@@ -25,7 +25,7 @@ const Host = sequelize.define(
                 type: DataTypes.INTEGER,
             },
             host_type:{
-                type: DataTypes.TINYINT,
+                type: DataTypes.ENUM('HOST', 'GUEST'),
             },
             user_id:{
                 type: DataTypes.INTEGER,

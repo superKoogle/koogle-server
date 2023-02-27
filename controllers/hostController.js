@@ -5,16 +5,16 @@ const Host = db.hosts
 const User = db.users
 
 const addNewHost = async(req,res)=>{
-    console.log(req.body)
-    const {host_start_date, host_end_date,host_always,host_max_guests,host_min_age,host_type,user_id} = req.body
+    const user_id = req.user.user_id;
+    const {host_start_date, host_end_date,host_always,host_max_guests,host_min_age,host_type} = req.body
+    if(!host_type) return res.status(400).json({message:'All Fields are required'});
     const host = await Host.create({host_start_date, host_end_date,host_always,host_max_guests,host_min_age,host_type,user_id})
     if(!host){
         return res.status(400).json({message:'Invalid host data received'})
     }
-    const t = [1,0];
     const relevantHosts = await Host.findAll({
         where:{
-            host_type:t[host_type],
+            host_type:host_type=='HOST'?'GUEST':'HOST',
             //host_start_date:{[Op.lte]:host_start_date},
             //host_end_date:{[Op.gte]:host_end_date},//Beayah!!
             host_max_guests:{[Op.gte]:host_max_guests},
@@ -29,7 +29,11 @@ const addNewHost = async(req,res)=>{
     })
     
     const user = await User.findOne({where:{user_id:user_id}});
-    console.log(relevantHosts);
+    sendMailToRelevantHost(relevantHosts, user);
+    return res.status(201).json({message: 'New host created'})
+}
+
+const sendMailToRelevantHost = (relevantHosts, user)=>{
     relevantHosts.forEach(host => {
         console.log(host.dataValues.user.user_email, user.dataValues.user_email)
         var mailOptions = {
@@ -46,7 +50,6 @@ const addNewHost = async(req,res)=>{
             }
           });
     });
-    return res.status(201).json({message: 'New host created'})
 }
 
 const getHostById = async(req,res)=>{
