@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3600
 
 //middleware
 app.use(cors(corsOptions))
-//app.use(express.json())
+app.use(express.json())
 app.use(bodyParser.urlencoded())
 app.use(cookieParser())
 

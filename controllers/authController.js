@@ -20,7 +20,7 @@ const SignIn = async (req, res) => {
 
 const SignUp = async (req, res) => {
     const { user_name, user_fname, user_lname, user_email, user_password } = req.body;
-    if (!user_fname || !user_lname || !user_password || !user_name) {
+    if (!user_password || !user_name || !user_email) {
         return res.status(400).json({ message: 'All fields are required' })
     }
     const duplicate = await User.findOne({ where: { user_name: user_name } })
@@ -74,6 +74,3 @@ module.exports = {
     updateUserById, 
     changeUserPermission
 };
-
-
-
