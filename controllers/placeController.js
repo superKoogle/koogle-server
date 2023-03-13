@@ -1,4 +1,4 @@
-const maps = require('../maps')
+const maps = require('./maps')
 const db = require('../model/index')
 const Place = db.place
 const synagogue = require('./synagogueController')
@@ -7,6 +7,7 @@ const supermarket = require('./supermarketController')
 const restaurant = require('./restaurantController')
 const place = require('../model/place')
 
+//api/places/routes/placeRoutes/addNewPlace
 
 const addNewPlace = async (req, res) => {
     const { place_name, place_address, place_hours, place_img, place_type } = req.body
@@ -120,7 +121,7 @@ const getNearbyPlaces = async(req, res)=>{
     var places = await Place.findAll();
     const dests = places.map(place => { return { lat: place.dataValues.place_lat, lng: place.dataValues.place_lng } })
     const distances = await maps.distancematrix({ lat, lng }, dests);
-    places = places.filter((_, i) =>  distances[i].distance.value <= maxDistance )
+    places = places.filter((_, i) =>  distances[i].distance?.value <= maxDistance )
     if (!places?.length) { return res.status(400).json({ message: 'No places found' }) }
     res.json(places);
 }

@@ -23,7 +23,7 @@ app.use('/api/places', require('./routes/placeRoutes'))
 app.use('/api/hosts', require('./routes/hostRoutes'))
 app.use('/api/auth', require('./routes/authRoutes'))
 app.use('/api/habad_events', require('./routes/habadEventRoutes'))
-app.use('/maps_api/complete', require('./maps').placeAutocomplete)
+app.use('/api/maps', require('./routes/mapRoutes'))
 
 
 app.all('*', (req, res) => {

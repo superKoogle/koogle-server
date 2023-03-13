@@ -3,15 +3,25 @@ const { Client } = require("@googlemaps/google-maps-services-js");
 const client = new Client({});
 
 const geocode = async (address) => {
+  console.log(address);
   const args = {
     params: {
       key: process.env.GOOGLE_MAPS_API_KEY,
       address: address,
     }
   };
-  const coords = await client.geocode(args).then(res => { return res.data.results[0].geometry.location })
+  
+  const coords = await client.geocode(args).then(res => { return res.data.results[0]?.geometry.location })
   return coords;
 }
+
+const geocodeAddress = async (req, res) => {
+    const {address} = req.body;
+    if(!address){
+     return res.status(400).json({message: 'Address is required'})
+    }
+    return res.status(200).json(await geocode(address));
+  }
 
 
 const distancematrix = async (origin, dests) => {
@@ -47,4 +57,5 @@ module.exports = {
   geocode,
   distancematrix,
   placeAutocomplete,
+  geocodeAddress
 }
