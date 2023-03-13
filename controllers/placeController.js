@@ -115,6 +115,7 @@ const getNearbyPlaces = async(req, res)=>{
     if (!((lat && lng) || address) || !maxDistance) { return res.status(400).json({ message: 'All fields are required' }) }
     if(!(lat && lng)){
         const coords = await maps.geocode(address);
+        if(!coords)return res.status(400).json({ message: 'No places found' });
         lat = coords.lat;
         lng = coords.lng;
     }
