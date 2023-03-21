@@ -4,10 +4,11 @@ const mapController = require('../controllers/maps.js')
 const verifyJWT = require("../middleware/verifyJWT")
 //router.use(verifyJWT)
 
+
 router.route('/address')
     .post(mapController.placeAutocomplete)
 router.route('/geocode')
     .post(mapController.geocodeAddress)
-// router.route('/geocode')
-//     .post(mapController.geocode)
+router.route('/direction')
+    .post(mapController.direction)
 module.exports = router
