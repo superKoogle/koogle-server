@@ -35,7 +35,6 @@ const distancematrix = async (origin, dests) => {
     }
   }
   const durations = await client.distancematrix(request).then(res => { return res.data.rows[0].elements });
-  // console.log(durations);
   return durations;
 }
 

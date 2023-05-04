@@ -7,11 +7,17 @@ const User = db.users
 const addNewHost = async(req,res)=>{
     const user_id = req.user.user_id;
     const {host_start_date, host_end_date,host_always,host_max_guests,host_min_age,host_type} = req.body
+  
     if(!host_type) return res.status(400).json({message:'All Fields are required'});
-    const host = await Host.create({host_start_date, host_end_date,host_always,host_max_guests,host_min_age,host_type,user_id})
+    if(host_start_date && host_end_date){
+     var host = await Host.create({host_start_date, host_end_date,host_always,host_max_guests,host_min_age,host_type,user_id})}
+   else{
+    var host = await Host.create({host_always,host_max_guests,host_min_age,host_type,user_id})}
+   
     if(!host){
         return res.status(400).json({message:'Invalid host data received'})
     }
+    console.log("in server")
     const relevantHosts = await Host.findAll({
         where:{
             host_type:host_type=='HOST'?'GUEST':'HOST',
@@ -24,7 +30,7 @@ const addNewHost = async(req,res)=>{
         },
         attributes:['host_start_date', 'host_end_date','host_always','host_max_guests','host_min_age','host_type'],
         include    : [
-            { model: User, as: 'user', attributes:['user_fname','user_lname', 'user_email', 'user_location_lat', 'user_location_lng'], incl}
+            { model: User, as: 'user', attributes:['user_fname','user_lname', 'user_email', 'user_location_lat', 'user_location_lng']}
         ]
     })
     
@@ -53,7 +59,7 @@ const sendMailToRelevantHost = (relevantHosts, user)=>{
 }
 
 const getHostById = async(req,res)=>{
-    const {host_id} = req.body;
+    const {host_id} = req.query;
     if(!host_id){return res.status(400).json({message: 'Host ID required'})}
     const host = await Host.findOne({where:{host_id:host_id}})
     if(!host){return res.status(400).json({message: 'Host not found'})}
@@ -61,7 +67,7 @@ const getHostById = async(req,res)=>{
 }
 
 const getHostsByUserId = async(req,res)=>{
-    const {user_id} = req.body;
+    const {user_id} = req.query;
     if(!user_id){return res.status(400).json({message: 'Host ID required'})}
     const hosts = await Host.findAll({where:{user_id:user_id}})
     if (!hosts?.length) {

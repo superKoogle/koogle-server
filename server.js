@@ -24,6 +24,8 @@ app.use('/api/hosts', require('./routes/hostRoutes'))
 app.use('/api/auth', require('./routes/authRoutes'))
 app.use('/api/habad_events', require('./routes/habadEventRoutes'))
 app.use('/api/maps', require('./routes/mapRoutes'))
+app.use('/api/upload', require('./routes/uploadRoutes'));
+
 
 
 app.all('*', (req, res) => {
