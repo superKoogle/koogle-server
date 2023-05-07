@@ -77,7 +77,7 @@ const getHostsByUserId = async(req,res)=>{
 }
 
 const deleteHost = async(req,res)=>{
-    const {host_id} = req.body
+    const host_id = req.params.id;
     if(!host_id){
         return res.status(400).json({message: 'Host ID required'})
     }
