@@ -11,4 +11,6 @@ router.route('/geocode')
     .post(mapController.geocodeAddress)
 router.route('/direction')
     .post(mapController.direction)
+router.route('/reverseGeocode')
+    .post(mapController.reverseGeocode)
 module.exports = router

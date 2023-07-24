@@ -24,6 +24,22 @@ const geocodeAddress = async (req, res) => {
   return res.status(200).json(await geocode(address));
 }
 
+const reverseGeocode = async (req, res) => {
+  const { lat, lng } = req.body;
+  if (!lat || !lng) {
+    return res.status(400).json({ message: 'Address is required' })
+  }
+  const request = {
+    params: {
+      latlng: [lat, lng],
+      key: process.env.GOOGLE_MAPS_API_KEY
+    }
+  }
+  const result = await client.reverseGeocode(request);
+  console.log(result);
+  return res.status(200).json(result.data);
+}
+
 
 const distancematrix = async (origin, dests) => {
   const request = {
@@ -80,10 +96,11 @@ const direction = async (req, res) => {
     });
   });
   const request = {
-    "origin":{ "lat": source_lat, "lng": source_lng },
+    "origin": { "lat": source_lat, "lng": source_lng },
     "destination": { "lat": dest_lat, "lng": dest_lng },
-    "travelMode": "DRIVING"}
-  return res.status(200).json({...directionRes.data, request});
+    "travelMode": "DRIVING"
+  }
+  return res.status(200).json({ ...directionRes.data, request });
 }
 
 
@@ -92,5 +109,6 @@ module.exports = {
   distancematrix,
   placeAutocomplete,
   geocodeAddress,
-  direction
+  direction,
+  reverseGeocode
 }
