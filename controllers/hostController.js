@@ -17,7 +17,6 @@ const addNewHost = async(req,res)=>{
     if(!host){
         return res.status(400).json({message:'Invalid host data received'})
     }
-    console.log("in server")
     const relevantHosts = await Host.findAll({
         where:{
             host_type:host_type=='HOST'?'GUEST':'HOST',

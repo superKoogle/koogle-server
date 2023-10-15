@@ -19,7 +19,6 @@ const upload = async (req, res) =>{
         console.log("error. dont be sad, it will be ok!")
         return res.status(500).send("error writing file "+err);
     }
-    //res.send("test");
 }
 
 module.exports = {upload}

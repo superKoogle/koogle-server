@@ -117,9 +117,9 @@ const getNearbyPlaces = async(req, res)=>{
         lat = coords.lat;
         lng = coords.lng;
     }
-    var places = await Place.findAll();
+     var places = await Place.findAll();
     const dests = places.map(place => { return { lat: place.dataValues.place_lat, lng: place.dataValues.place_lng } })
-    const distances = await maps.distancematrix({ lat, lng }, dests);
+        const distances = await maps.distancematrix({ lat, lng }, dests);
     places = places.map((place, i)=>{return{...place.dataValues, distance:distances[i].distance?.value}}).filter((p) =>  p.distance <= maxDistance )
     if (!places?.length) { return res.status(400).json({ message: 'No places found' }) }
     res.json(places);
