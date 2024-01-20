@@ -63,9 +63,14 @@ const placeAutocomplete = async (req, res) => {
       key: process.env.GOOGLE_MAPS_API_KEY
     }
   }
-  var suggestions = await client.placeAutocomplete(request).then(res => { return res.data })
-  suggestions = suggestions.predictions.map(e => e.description)
-  return res.status(200).json(suggestions);
+  try{
+      var suggestions = await client.placeAutocomplete(request).then(res => { return res.data })
+      suggestions = suggestions.predictions.map(e => e.description)
+      return res.status(200).json(suggestions);
+  }
+  catch{
+        return res.status(500).json({message: "internal server error"});
+  }
 }
 const direction = async (req, res) => {
   const { source_lat, source_lng, dest_lat, dest_lng } = req.body;
