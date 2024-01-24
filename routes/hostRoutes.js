@@ -3,7 +3,6 @@ const router = express.Router()
 const hostController = require('../controllers/hostController.js')
 const verifyJWT = require("../middleware/verifyJWT")
 router.use(verifyJWT)
-//הכל
 
 router.route('/')
     .get(hostController.getHostsByUserId)

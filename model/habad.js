@@ -13,7 +13,7 @@ const Habad = sequelize.define(
                 type: DataTypes.STRING(12),
             },
             habad_site_link:{
-                type: DataTypes.STRING(45),
+                type: DataTypes.STRING(200),
             }
         },
         {
