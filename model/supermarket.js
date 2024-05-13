@@ -11,7 +11,7 @@ const {sequelize, DataTypes} = require('./sequelize');
                 type: DataTypes.STRING(12),
             },
             market_site_link:{
-                type: DataTypes.STRING(45),
+                type: DataTypes.STRING(200),
             }
         },
         {

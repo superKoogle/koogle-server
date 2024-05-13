@@ -18,7 +18,7 @@ const Restaurant = sequelize.define(
             allowNull: false
         },
         res_site_link: {
-            type: DataTypes.STRING(45),
+            type: DataTypes.STRING(200),
         },
         res_stars: {
             type: DataTypes.INTEGER,
