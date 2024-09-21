@@ -11,12 +11,12 @@ const geocode = async (address) => {
       address: address,
     }
   };
-  const coords = []
+  var coords = []
   try{
     coords = await client.geocode(args).then(res => { return res.data.results[0]?.geometry.location })
   }
-  catch{
-    console.log("an error acurred while using google api")
+  catch(e){
+    console.log(`an error acurred while using google api: ${e}`)
   }
   return coords;
 }
@@ -29,7 +29,8 @@ const geocodeAddress = async (req, res) => {
   try{
     return res.status(200).json(await geocode(address));
   }
-  catch{
+  catch(e){
+    console.log(e)
     return res.status(503).json({  });
   }
 }
@@ -45,7 +46,7 @@ const reverseGeocode = async (req, res) => {
       key: process.env.GOOGLE_MAPS_API_KEY
     }
   }
-  const result = []
+  var result = []
   try{
     result = await client.reverseGeocode(request);
   }
@@ -66,12 +67,12 @@ const distancematrix = async (origin, dests) => {
       key: process.env.GOOGLE_MAPS_API_KEY
     }
   }
-  const durations = []
+  var durations = []
   try{
     durations = await client.distancematrix(request).then(res => { return res.data.rows[0].elements });
   }
   catch{
-    return res.status(503).json({  });
+    return []
   }
   return durations;
 }
@@ -90,8 +91,9 @@ const placeAutocomplete = async (req, res) => {
       suggestions = suggestions.predictions.map(e => e.description)
       return res.status(200).json(suggestions);
   }
-  catch{
-        return res.status(500).json({message: "internal server error"});
+  catch(e){
+      console.log(e)
+      return res.status(500).json({message: "internal server error"});
   }
 }
 const direction = async (req, res) => {
@@ -108,7 +110,7 @@ const direction = async (req, res) => {
       key: process.env.GOOGLE_MAPS_API_KEY
     }
   }
-  const directionRes = []
+  var directionRes = []
   try{
     directionRes = await client.directions(requestOptions);
   }

@@ -16,6 +16,7 @@ const addNewPlace = async (req, res) => {
         return res.status(400).json({ message: 'All fields are required' })
     }
     const {lat, lng} = await maps.geocode(place_address);
+    if (!lat || !lng) return res.status(503).json({message: 'address not found'});
     const place = await Place.create({ place_name, place_address, place_lat: lat, place_lng: lng, place_hours, place_img, place_info_by, place_type })
     if (!place) {
         return res.status(400).json({ message: 'Invalid place data received' })
@@ -117,10 +118,11 @@ const getNearbyPlaces = async(req, res)=>{
         lat = coords.lat;
         lng = coords.lng;
     }
-     var places = await Place.findAll();
+    var places = await Place.findAll();
     const dests = places.map(place => { return { lat: place.dataValues.place_lat, lng: place.dataValues.place_lng } })
-        const distances = await maps.distancematrix({ lat, lng }, dests);
-    places = places.map((place, i)=>{return{...place.dataValues, distance:distances[i].distance?.value}}).filter((p) =>  p.distance <= maxDistance )
+    console.log({lat, lng})
+    const distances = await maps.distancematrix({ lat, lng }, dests);
+    places = places.map((place, i)=>{return{...place.dataValues, distance:distances[i]?.distance?.value}}).filter((p) =>  p.distance <= maxDistance )
     if (!places?.length) { return res.status(400).json({ message: 'No places found' }) }
     res.json(places);
 }
